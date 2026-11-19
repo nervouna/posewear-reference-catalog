@@ -21,6 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 catalog.py pointer public/v1/source.json
+      - run: python3 catalog.py pointer public/v1/costume.json --kind costume
+      - run: python3 catalog.py pointer public/v1/portrait.json --kind portrait
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

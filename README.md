@@ -1,15 +1,22 @@
 # PoseWear 助手参考目录
 
-GitHub Pages 每日发布姿势 JSON 的上游地址。公开内容仅包含版本和链接。姿势图片和原始数据的许可见 [上游说明](https://github.com/atuizz/posewear#许可与素材边界)。
+GitHub Pages 每日检查姿势、服装和人像目录，公开各目录的当前上游 URL。助手用 Python 3 和 curl 生成自己的 JSON 快照。预览图由 PoseWear 提供。[上游来源与许可](https://github.com/atuizz/posewear#许可与素材边界)
 
-仓库 Pages 构建来源选 GitHub Actions，运行 Publish catalog pointer。稳定入口为 https://<账号>.github.io/<仓库>/v1/source.json 。
+在仓库目录运行以下命令刷新数据。每个文件独立校验并替换，刷新失败时可以继续检索旧文件。
 
-助手环境需要 Python 3 和 curl。首次创建或定时刷新私有快照：
+```sh
+base=https://nervouna.github.io/posewear-reference-catalog/v1
+python3 catalog.py snapshot private/poses.json --pointer "$base/source.json"
+python3 catalog.py snapshot private/costume.json --kind costume --pointer "$base/costume.json"
+python3 catalog.py snapshot private/portrait.json --kind portrait --pointer "$base/portrait.json"
+```
 
-    python3 catalog.py snapshot private/poses.json
+助手将用户请求提取为关键词，按图库选择快照。关键词用空格分隔，须全部匹配；视角使用完整中英文名称。默认最多返回 5 个条目，无匹配时返回空数组。
 
-使用 Pages 入口刷新：
+```sh
+python3 search.py private/poses.json '后仰坐 单膝' --angle 侧面
+python3 search.py private/costume.json '春季 白色运动鞋' --limit 3
+python3 search.py private/portrait.json '短发 正脸' --limit 3
+```
 
-    python3 catalog.py snapshot private/poses.json --pointer https://<账号>.github.io/<仓库>/v1/source.json
-
-刷新失败时继续使用已有文件。助手按 zh、en、category 检索，再从 angles 中选择匹配的视角，使用 image 获取预览，使用 source 引用出处。图片仍由上游提供。
+Python 助手也可以调用 `search.search(records, query, angle=None, limit=5)`，复用已加载的快照。结果包含中英文描述和来源页 source；服装、人像使用 image，姿势使用 angles 里的 image。
