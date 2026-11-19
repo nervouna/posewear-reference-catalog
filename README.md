@@ -20,3 +20,7 @@ python3 search.py private/portrait.json '短发 正脸' --limit 3
 ```
 
 Python 助手也可以调用 `search.search(records, query, angle=None, limit=5)`，复用已加载的快照。结果包含中英文描述和来源页 source；服装、人像使用 image，姿势使用 angles 里的 image。
+
+## 作为助手技能使用
+
+将整个仓库克隆到助手支持的技能目录下，保留文件夹名 `posewear-reference-catalog`。技能入口与两个 Python 脚本位于同一目录；也可以让具备命令执行能力的助手直接读取[技能说明](SKILL.md)。
